@@ -1,0 +1,112 @@
+{% extends 'app_time_calc/base.html' %}
+
+{% block title %}Einträge bestätigen{% endblock title %}
+
+{% block style %}
+
+    .card { margin: 1rem 0; }
+    table { font-size: 0.8rem; }
+    tbody {
+        display: block;
+        height: 200px;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+    thead, tbody tr {
+        display: table;
+        width: 100%;
+        table-layout: fixed; /* even columns width , fix width of table too*/
+    }
+    button {
+        margin: 2rem 1rem;
+    }
+    button a, button a:visited, button a:hover, button a:active {
+        color: #fff;
+        text-decoration: none;
+    }
+
+{% endblock style %}
+
+{% block content %}
+<div class="container">
+
+    <button class="btn btn-info btn-sm">
+        <a href="{% url 'Main' %}">Zurück</a>
+    </button>
+
+    <div class="card">
+        <div class="card-body">
+
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Time</th>
+                        <th scope="col">Rest</th>
+                        <th scope="col">Key</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in r_open_json %}
+                        {% if item.diff_sec > 36000 %}
+                            <tr style="background-color: #ff6666;">
+                                <td>{{ item.id }}</td>
+                                <td>{{ item.str_date }}</td>
+                                <td>{{ item.str_hours }}:{{ item.str_minutes }}</td>
+                                <td>{{ item.time_rest }}</td>
+                                <td>{{ item.key_values }}</td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td>{{ item.id }}</td>
+                                <td>{{ item.str_date }}</td>
+                                <td>{{ item.str_hours }}:{{ item.str_minutes }}</td>
+                                <td>{{ item.time_rest }}</td>
+                                <td>{{ item.key_values }}</td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <form action="" method="post">
+                {% csrf_token %}
+                <button class="btn btn-success" name="confirm_button" id="confirm_button" type="submit">
+                    Bestätigen
+                </button>
+            </form>
+
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Time</th>
+                        <th scope="col">Rest</th>
+                        <th scope="col">Key</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in r_confirmed_json %}
+                        <tr>
+                            <td>{{ item.id }}</td>
+                            <td>{{ item.str_date }}</td>
+                            <td>{{ item.str_hours }}:{{ item.str_minutes }}</td>
+                            <td>{{ item.time_rest }}</td>
+                            <td>{{ item.key_values }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block script %}{% endblock script %}

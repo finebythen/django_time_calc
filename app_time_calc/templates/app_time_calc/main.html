@@ -1,0 +1,110 @@
+{% extends 'app_time_calc/base.html' %}
+
+{% block title %}Django | Time Calculation{% endblock title %}
+
+{% block style %}
+
+    table { font-size: 0.8rem; }
+    .card { margin: 1rem 0; }
+    .div-flex {
+        display: flex;
+        justify-content: space-between;
+        margin: 1rem 0 0 1rem;
+    }
+    .div-input { font-size: 0.8rem; }
+    .div-input p { margin: 0; }
+    button { margin: 1rem 0; }
+    form button {
+        margin: 2rem 1rem;
+        width: 150px;
+    }
+    button a, button a:visited, button a:hover, button a:active {
+        text-decoration: none;
+        color: #fff;
+    }
+
+    input[type="date"], input[type="time"], select {
+        width: 150px;
+        height: 30px;
+    }
+
+{% endblock style %}
+
+{% block content %}
+<div class="container">
+
+    <button class="btn btn-info btn-sm">
+        <a href="{% url 'Confirm' %}">Einträge bestätigen</a>
+    </button>
+
+    <div class="card">
+        <div class="card-body">
+
+            <form action="" method="post">
+                {% csrf_token %}
+
+                <div class="div-flex">
+                    <div class="div-input">
+                        <p>Datum</p>
+                        <input id="te_date" name="te_date" type="date" required="required">
+                    </div>
+
+                    <div class="div-input">
+                        <p>Zeit (von)</p>
+                        <input id="te_time_from" name="te_time_from" type="time" required="required">
+                    </div>
+
+                    <div class="div-input">
+                        <p>Zeit (bis)</p>
+                        <input id="te_time_to" name="te_time_to" type="time" required="required">
+                    </div>
+
+                    <div class="div-input">
+                        <p>Zeit (Pause)</p>
+                        <input id="te_time_rest" name="te_time_rest" type="time" required="required">
+                    </div>
+                </div>
+
+                <div class="div-flex">
+                    <div class="div-input">
+                        <p>Schlüssel:</p>
+                        {{ formset.key_values }}
+                    </div>
+                </div>
+
+                <button class="btn btn-success" type="submit">Speichern</button>
+            </form>
+
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+
+            <table class="table table-hover">
+                <head>
+                    <tr>
+                        <th scope="col">Date</th>
+                        <th scope="col">Time</th>
+                        <th scope="col">Rest</th>
+                        <th scope="col">Key</th>
+                    </tr>
+                </head>
+                <tbody>
+                    {% for item in qs %}
+                        <tr>
+                            <td>{{ item.date }}</td>
+                            <td>{{ item.time_start }} - {{ item.time_end }}</td>
+                            <td>{{ item.time_rest }}</td>
+                            <td>{{ item.key_values }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block script %}{% endblock script %}
